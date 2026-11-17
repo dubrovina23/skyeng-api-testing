@@ -1,0 +1,1066 @@
+{
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Cookie",
+        "type": "string"
+      },
+      {
+        "key": "value",
+        "value": "token_global={{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "info": {
+    "name": "Skyeng_API_Личные_события",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Учебный QA-проект: функциональное тестирование API личных событий. Публичная копия без учётных данных. Используйте только с разрешённой тестовой учётной записью."
+  },
+  "item": [
+    {
+      "item": [
+        {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r\npm.test(\"Статус ответа 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Ответ содержит массив событий\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data.events).to.be.an(\"array\");\r\n});\r\n\r\npm.test(\"Ошибки API отсутствуют\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.errors).to.be.null;\r\n});\r\n"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "01_Получение_расписания",
+          "request": {
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "\r\n{\r\n  \"from\": \"2026-11-09T00:00:00+03:00\",\r\n  \"till\": \"2026-11-15T23:59:59+03:00\",\r\n  \"onlyTypes\": []\r\n}\r\n"
+            },
+            "header": [],
+            "method": "POST",
+            "url": {
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v2",
+                "schedule",
+                "events"
+              ],
+              "raw": "{{baseUrl}}/v2/schedule/events"
+            }
+          },
+          "response": []
+        },
+        {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r\npm.test(\"Статус ответа 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nvar key = \"eventId\";\r\nvar value = pm.response.json().data.payload.id;\r\npm.collectionVariables.set(key, value);\r\n"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "02_Создание_личного_события",
+          "request": {
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "\r\n{\r\n  \"backgroundColor\": \"#FFF7C7\",\r\n  \"color\": \"#FAC641\",\r\n  \"description\": \"Проверка создания личного события\",\r\n  \"title\": \"Курсовая_API_Создание_01\",\r\n  \"startAt\": \"2026-11-18T14:00:00+03:00\",\r\n  \"endAt\": \"2026-11-18T14:30:00+03:00\"\r\n}\r\n"
+            },
+            "header": [],
+            "method": "POST",
+            "url": {
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v2",
+                "schedule",
+                "createPersonal"
+              ],
+              "raw": "{{baseUrl}}/v2/schedule/createPersonal"
+            }
+          },
+          "response": []
+        },
+        {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r\npm.test(\"Статус ответа 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Событие создано\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data.payload.id).to.exist;\r\n});\r\n\r\npm.test(\"Длительность события 3 минуты\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data.durationSeconds).to.eql(180);\r\n});\r\n\r\npm.test(\"Ошибки API отсутствуют\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.errors).to.be.null;\r\n});\r\n\r\n// Сохранение ID созданного события\r\nvar key = \"eventId\";\r\nvar value = pm.response.json().data.payload.id;\r\npm.collectionVariables.set(key, value);\r\n"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "08_Создание_события_3мин_POS",
+          "request": {
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "\r\n{\r\n  \"backgroundColor\": \"#FFF7C7\",\r\n  \"color\": \"#FAC641\",\r\n  \"description\": \"Проверка события длительностью 3 минуты\",\r\n  \"title\": \"Курсовая_API_03мин_08\",\r\n  \"startAt\": \"2026-11-21T14:00:00+03:00\",\r\n  \"endAt\": \"2026-11-21T14:03:00+03:00\"\r\n}\r\n"
+            },
+            "header": [],
+            "method": "POST",
+            "url": {
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v2",
+                "schedule",
+                "createPersonal"
+              ],
+              "raw": "{{baseUrl}}/v2/schedule/createPersonal"
+            }
+          },
+          "response": []
+        },
+        {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r\npm.test(\"Статус ответа 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Ответ содержит массив событий\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data.events).to.be.an(\"array\");\r\n});\r\n\r\npm.test(\"Ошибки API отсутствуют\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.errors).to.be.null;\r\n});\r\n\r\npm.test(\"Событие 3 минуты найдено в расписании\", function () {\r\n    const response = pm.response.json();\r\n    const eventId = pm.collectionVariables.get(\"eventId\");\r\n\r\n    const event = response.data.events.find(item =>\r\n        String(item.payload.id) === String(eventId)\r\n    );\r\n\r\n    pm.expect(event).to.exist;\r\n    pm.expect(event.durationSeconds).to.eql(180);\r\n});\r\n"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "08_Проверка_события_3мин_POS",
+          "request": {
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "\r\n\r\n{\r\n  \"from\": \"2026-11-21T00:00:00+03:00\",\r\n  \"till\": \"2026-11-21T23:59:59+03:00\",\r\n  \"onlyTypes\": []\r\n}\r\n"
+            },
+            "header": [],
+            "method": "POST",
+            "url": {
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v2",
+                "schedule",
+                "events"
+              ],
+              "raw": "{{baseUrl}}/v2/schedule/events"
+            }
+          },
+          "response": []
+        },
+        {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r\npm.test(\"Статус ответа 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Событие создано\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data.payload.id).to.exist;\r\n});\r\n\r\npm.test(\"Длительность события 5 минут\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data.durationSeconds).to.eql(300);\r\n});\r\n\r\npm.test(\"Ошибки API отсутствуют\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.errors).to.be.null;\r\n});\r\n\r\n// Сохранение ID созданного события\r\nvar key = \"eventId\";\r\nvar value = pm.response.json().data.payload.id;\r\npm.collectionVariables.set(key, value);\r\n"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "09_Создание_события_5мин_POS",
+          "request": {
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{\r\n  \"backgroundColor\": \"#FFF7C7\",\r\n  \"color\": \"#FAC641\",\r\n  \"description\": \"Проверка события длительностью 5 минут\",\r\n  \"title\": \"Курсовая_API_5мин_09\",\r\n  \"startAt\": \"2026-11-21T14:10:00+03:00\",\r\n  \"endAt\": \"2026-11-21T14:15:00+03:00\"\r\n}"
+            },
+            "header": [],
+            "method": "POST",
+            "url": {
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v2",
+                "schedule",
+                "createPersonal"
+              ],
+              "raw": "{{baseUrl}}/v2/schedule/createPersonal"
+            }
+          },
+          "response": []
+        },
+        {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r\npm.test(\"Статус ответа 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Ответ содержит массив событий\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data.events).to.be.an(\"array\");\r\n});\r\n\r\npm.test(\"Ошибки API отсутствуют\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.errors).to.be.null;\r\n});\r\n\r\npm.test(\"Событие 5 минут найдено в расписании\", function () {\r\n    const response = pm.response.json();\r\n    const eventId = pm.collectionVariables.get(\"eventId\");\r\n\r\n    const event = response.data.events.find(item =>\r\n        String(item.payload.id) === String(eventId)\r\n    );\r\n\r\n    pm.expect(event).to.exist;\r\n    pm.expect(event.durationSeconds).to.eql(300);\r\n});\r\n\r\n"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "09_Проверка_события_5мин_POS",
+          "request": {
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "\r\n{\r\n  \"from\": \"2026-11-21T00:00:00+03:00\",\r\n  \"till\": \"2026-11-21T23:59:59+03:00\",\r\n  \"onlyTypes\": []\r\n}\r\n"
+            },
+            "header": [],
+            "method": "POST",
+            "url": {
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v2",
+                "schedule",
+                "events"
+              ],
+              "raw": "{{baseUrl}}/v2/schedule/events"
+            }
+          },
+          "response": []
+        },
+        {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r\npm.test(\"Статус ответа 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Событие создано\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data.payload.id).to.exist;\r\n});\r\n\r\npm.test(\"Длительность события 1 час\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data.durationSeconds).to.eql(3600);\r\n});\r\n\r\npm.test(\"Ошибки API отсутствуют\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.errors).to.be.null;\r\n});\r\n\r\n// Сохранение ID созданного события\r\nvar key = \"eventId\";\r\nvar value = pm.response.json().data.payload.id;\r\npm.collectionVariables.set(key, value);\r\n"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "10_Создание_события_1час_POS",
+          "request": {
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "\r\n{\r\n  \"backgroundColor\": \"#FFF7C7\",\r\n  \"color\": \"#FAC641\",\r\n  \"description\": \"Проверка события длительностью 1 час\",\r\n  \"title\": \"Курсовая_API_1час_10\",\r\n  \"startAt\": \"2026-11-21T16:00:00+03:00\",\r\n  \"endAt\": \"2026-11-21T17:00:00+03:00\"\r\n}\r\n"
+            },
+            "header": [],
+            "method": "POST",
+            "url": {
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v2",
+                "schedule",
+                "createPersonal"
+              ],
+              "raw": "{{baseUrl}}/v2/schedule/createPersonal"
+            }
+          },
+          "response": []
+        },
+        {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r\npm.test(\"Статус ответа 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Ответ содержит массив событий\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data.events).to.be.an(\"array\");\r\n});\r\n\r\npm.test(\"Ошибки API отсутствуют\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.errors).to.be.null;\r\n});\r\n\r\npm.test(\"Событие 1 час найдено в расписании\", function () {\r\n    const response = pm.response.json();\r\n    const eventId = pm.collectionVariables.get(\"eventId\");\r\n\r\n    const event = response.data.events.find(item =>\r\n        String(item.payload.id) === String(eventId)\r\n    );\r\n\r\n    pm.expect(event).to.exist;\r\n    pm.expect(event.durationSeconds).to.eql(3600);\r\n});\r\n\r\n\r\n"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "10_Проверка_события_1час_POS",
+          "request": {
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "\r\n{\r\n  \"from\": \"2026-11-21T00:00:00+03:00\",\r\n  \"till\": \"2026-11-21T23:59:59+03:00\",\r\n  \"onlyTypes\": []\r\n}\r\n"
+            },
+            "header": [],
+            "method": "POST",
+            "url": {
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v2",
+                "schedule",
+                "events"
+              ],
+              "raw": "{{baseUrl}}/v2/schedule/events"
+            }
+          },
+          "response": []
+        },
+        {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r\npm.test(\"Статус ответа 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Событие создано\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data.payload.id).to.exist;\r\n});\r\n\r\npm.test(\"Длительность события 30 минут\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data.durationSeconds).to.eql(1800);\r\n});\r\n\r\npm.test(\"Ошибки API отсутствуют\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.errors).to.be.null;\r\n});\r\n\r\n// Сохранение ID созданного события\r\nvar key = \"eventId\";\r\nvar value = pm.response.json().data.payload.id;\r\npm.collectionVariables.set(key, value);\r\n"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "11_Создание_спецсимволы_POS",
+          "request": {
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{\r\n  \"backgroundColor\": \"#FFF7C7\",\r\n  \"color\": \"#FAC641\",\r\n  \"description\": \"Проверка символов: №, &, !, ?\",\r\n  \"title\": \"Курсовая №11 — Тест & проверка!\",\r\n  \"startAt\": \"2026-11-22T11:00:00+03:00\",\r\n  \"endAt\": \"2026-11-22T11:30:00+03:00\"\r\n}"
+            },
+            "header": [],
+            "method": "POST",
+            "url": {
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v2",
+                "schedule",
+                "createPersonal"
+              ],
+              "raw": "{{baseUrl}}/v2/schedule/createPersonal"
+            }
+          },
+          "response": []
+        },
+        {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r\npm.test(\"Статус ответа 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Ответ содержит массив событий\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data.events).to.be.an(\"array\");\r\n});\r\n\r\npm.test(\"Ошибки API отсутствуют\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.errors).to.be.null;\r\n});\r\n\r\npm.test(\"Кириллица и спецсимволы сохранены\", function () {\r\n    const response = pm.response.json();\r\n    const eventId = pm.collectionVariables.get(\"eventId\");\r\n\r\n    const event = response.data.events.find(item =>\r\n        String(item.payload.id) === String(eventId)\r\n    );\r\n\r\n    pm.expect(event).to.exist;\r\n\r\n    pm.expect(event.payload.payload.title).to.eql(\r\n        \"Курсовая №11 — Тест & проверка!\"\r\n    );\r\n\r\n    pm.expect(event.payload.payload.description).to.eql(\r\n        \"Проверка символов: №, &, !, ?\"\r\n    );\r\n\r\n    pm.expect(event.durationSeconds).to.eql(1800);\r\n});\r\n\r\n\r\n"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "11_Проверка_спецсимволов_POS",
+          "request": {
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "\r\n{\r\n  \"from\": \"2026-11-22T00:00:00+03:00\",\r\n  \"till\": \"2026-11-22T23:59:59+03:00\",\r\n  \"onlyTypes\": []\r\n}\r\n"
+            },
+            "header": [],
+            "method": "POST",
+            "url": {
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v2",
+                "schedule",
+                "events"
+              ],
+              "raw": "{{baseUrl}}/v2/schedule/events"
+            }
+          },
+          "response": []
+        },
+        {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r\npm.test(\"Статус ответа 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Событие создано\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data.payload.id).to.exist;\r\n});\r\n\r\npm.test(\"Длительность события 30 минут\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data.durationSeconds).to.eql(1800);\r\n});\r\n\r\npm.test(\"Ошибки API отсутствуют\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.errors).to.be.null;\r\n});\r\n\r\n// Сохранение ID созданного события\r\nvar key = \"eventId\";\r\nvar value = pm.response.json().data.payload.id;\r\npm.collectionVariables.set(key, value);\r\n"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "12_Создание_пустое_описание_POS",
+          "request": {
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{\r\n  \"backgroundColor\": \"#FFF7C7\",\r\n  \"color\": \"#FAC641\",\r\n  \"description\": \"\",\r\n  \"title\": \"Курсовая_API_Пустое_Описание_12\",\r\n  \"startAt\": \"2026-11-23T12:00:00+03:00\",\r\n  \"endAt\": \"2026-11-23T12:30:00+03:00\"\r\n}"
+            },
+            "header": [],
+            "method": "POST",
+            "url": {
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v2",
+                "schedule",
+                "createPersonal"
+              ],
+              "raw": "{{baseUrl}}/v2/schedule/createPersonal"
+            }
+          },
+          "response": []
+        },
+        {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r\npm.test(\"Статус ответа 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Ответ содержит массив событий\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data.events).to.be.an(\"array\");\r\n});\r\n\r\npm.test(\"Ошибки API отсутствуют\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.errors).to.be.null;\r\n});\r\n\r\npm.test(\"Пустое описание сохранено\", function () {\r\n    const response = pm.response.json();\r\n    const eventId = pm.collectionVariables.get(\"eventId\");\r\n\r\n    const event = response.data.events.find(item =>\r\n        String(item.payload.id) === String(eventId)\r\n    );\r\n\r\n    pm.expect(event).to.exist;\r\n\r\n    pm.expect(event.payload.payload.title).to.eql(\r\n        \"Курсовая_API_Пустое_Описание_12\"\r\n    );\r\n\r\n    pm.expect(event.payload.payload.description).to.eql(\"\");\r\n\r\n    pm.expect(event.durationSeconds).to.eql(1800);\r\n});\r\n"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "12_Проверка_пустого_описания_POS",
+          "request": {
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "\r\n{\r\n  \"from\": \"2026-11-23T00:00:00+03:00\",\r\n  \"till\": \"2026-11-23T23:59:59+03:00\",\r\n  \"onlyTypes\": []\r\n}\r\n"
+            },
+            "header": [],
+            "method": "POST",
+            "url": {
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v2",
+                "schedule",
+                "events"
+              ],
+              "raw": "{{baseUrl}}/v2/schedule/events"
+            }
+          },
+          "response": []
+        },
+        {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r\npm.test(\"Статус ответа 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Событие создано\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data.payload.id).to.exist;\r\n});\r\n\r\npm.test(\"Длительность события 30 минут\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data.durationSeconds).to.eql(1800);\r\n});\r\n\r\npm.test(\"Ошибки API отсутствуют\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.errors).to.be.null;\r\n});\r\n\r\n// Сохранение ID созданного события\r\nvar key = \"eventId\";\r\nvar value = pm.response.json().data.payload.id;\r\npm.collectionVariables.set(key, value);\r\n"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "13_Создание_длинное_описание_POS",
+          "request": {
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "\r\n{\r\n  \"backgroundColor\": \"#FFF7C7\",\r\n  \"color\": \"#FAC641\",\r\n  \"description\": \"Проверка сохранения длинного описания личного события в расписании Skyeng. Событие создано для тестирования API в рамках курсовой работы. Описание содержит несколько предложений на русском языке. После создания необходимо получить расписание за указанную дату, найти событие по уникальному идентификатору и убедиться, что весь переданный текст сохранился полностью, без сокращений, потери символов и изменений.\",\r\n  \"title\": \"Курсовая_API_Длинное_Описание_13\",\r\n  \"startAt\": \"2026-11-24T12:00:00+03:00\",\r\n  \"endAt\": \"2026-11-24T12:30:00+03:00\"\r\n}"
+            },
+            "header": [],
+            "method": "POST",
+            "url": {
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v2",
+                "schedule",
+                "createPersonal"
+              ],
+              "raw": "{{baseUrl}}/v2/schedule/createPersonal"
+            }
+          },
+          "response": []
+        },
+        {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r\npm.test(\"Статус ответа 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Ответ содержит массив событий\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data.events).to.be.an(\"array\");\r\n});\r\n\r\npm.test(\"Ошибки API отсутствуют\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.errors).to.be.null;\r\n});\r\n\r\npm.test(\"Длинное описание сохранено полностью\", function () {\r\n    const response = pm.response.json();\r\n    const eventId = pm.collectionVariables.get(\"eventId\");\r\n\r\n    const event = response.data.events.find(item =>\r\n        String(item.payload.id) === String(eventId)\r\n    );\r\n\r\n    pm.expect(event).to.exist;\r\n\r\n    pm.expect(event.payload.payload.title).to.eql(\r\n        \"Курсовая_API_Длинное_Описание_13\"\r\n    );\r\n\r\n    pm.expect(event.payload.payload.description).to.eql(\r\n        \"Проверка сохранения длинного описания личного события в расписании Skyeng. Событие создано для тестирования API в рамках курсовой работы. Описание содержит несколько предложений на русском языке. После создания необходимо получить расписание за указанную дату, найти событие по уникальному идентификатору и убедиться, что весь переданный текст сохранился полностью, без сокращений, потери символов и изменений.\"\r\n    );\r\n\r\n    pm.expect(event.durationSeconds).to.eql(1800);\r\n});\r\n"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "13_Проверка_длинного_описания_POS",
+          "request": {
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "\r\n{\r\n  \"from\": \"2026-11-24T00:00:00+03:00\",\r\n  \"till\": \"2026-11-24T23:59:59+03:00\",\r\n  \"onlyTypes\": []\r\n}\r\n"
+            },
+            "header": [],
+            "method": "POST",
+            "url": {
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v2",
+                "schedule",
+                "events"
+              ],
+              "raw": "{{baseUrl}}/v2/schedule/events"
+            }
+          },
+          "response": []
+        },
+        {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r\npm.test(\"Статус ответа 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Событие создано\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data.payload.id).to.exist;\r\n});\r\n\r\npm.test(\"Длительность события 30 минут\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data.durationSeconds).to.eql(1800);\r\n});\r\n\r\npm.test(\"Ошибки API отсутствуют\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.errors).to.be.null;\r\n});\r\n\r\n// Сохранение ID созданного события\r\nvar key = \"eventId\";\r\nvar value = pm.response.json().data.payload.id;\r\npm.collectionVariables.set(key, value);\r\n"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "14_Создание_изменённые_цвета_POS",
+          "request": {
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{\r\n  \"backgroundColor\": \"#E3F2FD\",\r\n  \"color\": \"#1565C0\",\r\n  \"description\": \"Проверка сохранения изменённых цветов личного события\",\r\n  \"title\": \"Курсовая_API_Цвета_14\",\r\n  \"startAt\": \"2026-11-25T12:00:00+03:00\",\r\n  \"endAt\": \"2026-11-25T12:30:00+03:00\"\r\n}"
+            },
+            "header": [],
+            "method": "POST",
+            "url": {
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v2",
+                "schedule",
+                "createPersonal"
+              ],
+              "raw": "{{baseUrl}}/v2/schedule/createPersonal"
+            }
+          },
+          "response": []
+        },
+        {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r\npm.test(\"Статус ответа 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Ответ содержит массив событий\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data.events).to.be.an(\"array\");\r\n});\r\n\r\npm.test(\"Ошибки API отсутствуют\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.errors).to.be.null;\r\n});\r\n\r\npm.test(\"Изменённые цвета сохранены\", function () {\r\n    const response = pm.response.json();\r\n    const eventId = pm.collectionVariables.get(\"eventId\");\r\n\r\n    const event = response.data.events.find(item =>\r\n        String(item.payload.id) === String(eventId)\r\n    );\r\n\r\n    pm.expect(event).to.exist;\r\n\r\n    pm.expect(event.payload.payload.title).to.eql(\r\n        \"Курсовая_API_Цвета_14\"\r\n    );\r\n\r\n    pm.expect(event.payload.payload.description).to.eql(\r\n        \"Проверка сохранения изменённых цветов личного события\"\r\n    );\r\n\r\n    pm.expect(event.payload.payload.color).to.eql(\"#1565C0\");\r\n\r\n    pm.expect(event.payload.payload.backgroundColor).to.eql(\"#E3F2FD\");\r\n\r\n    pm.expect(event.durationSeconds).to.eql(1800);\r\n});\r\n"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "14_Проверка_изменённых_цветов_POS",
+          "request": {
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "\r\n{\r\n  \"from\": \"2026-11-25T00:00:00+03:00\",\r\n  \"till\": \"2026-11-25T23:59:59+03:00\",\r\n  \"onlyTypes\": []\r\n}\r\n"
+            },
+            "header": [],
+            "method": "POST",
+            "url": {
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v2",
+                "schedule",
+                "events"
+              ],
+              "raw": "{{baseUrl}}/v2/schedule/events"
+            }
+          },
+          "response": []
+        },
+        {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r\npm.test(\"Статус ответа 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Событие создано\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data.payload.id).to.exist;\r\n});\r\n\r\npm.test(\"Длительность события 30 минут\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data.durationSeconds).to.eql(1800);\r\n});\r\n\r\npm.test(\"Ошибки API отсутствуют\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.errors).to.be.null;\r\n});\r\n\r\n// Сохранение ID созданного события\r\nvar key = \"eventId\";\r\nvar value = pm.response.json().data.payload.id;\r\npm.collectionVariables.set(key, value);\r\n"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "15_Создание_title_1_символ_POS",
+          "request": {
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{\r\n  \"backgroundColor\": \"#FFF7C7\",\r\n  \"color\": \"#FAC641\",\r\n  \"description\": \"Проверка названия из одного символа\",\r\n  \"title\": \"А\",\r\n  \"startAt\": \"2026-11-26T12:00:00+03:00\",\r\n  \"endAt\": \"2026-11-26T12:30:00+03:00\"\r\n}"
+            },
+            "header": [],
+            "method": "POST",
+            "url": {
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v2",
+                "schedule",
+                "createPersonal"
+              ],
+              "raw": "{{baseUrl}}/v2/schedule/createPersonal"
+            }
+          },
+          "response": []
+        },
+        {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r\npm.test(\"Статус ответа 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Ответ содержит массив событий\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data.events).to.be.an(\"array\");\r\n});\r\n\r\npm.test(\"Ошибки API отсутствуют\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.errors).to.be.null;\r\n});\r\n\r\npm.test(\"Название из одного символа сохранено\", function () {\r\n    const response = pm.response.json();\r\n    const eventId = pm.collectionVariables.get(\"eventId\");\r\n\r\n    const event = response.data.events.find(item =>\r\n        String(item.payload.id) === String(eventId)\r\n    );\r\n\r\n    pm.expect(event).to.exist;\r\n\r\n    const title = event.payload.payload.title;\r\n\r\n    pm.expect(title).to.eql(\"А\");\r\n    pm.expect(Array.from(title).length).to.eql(1);\r\n\r\n    pm.expect(event.payload.payload.description).to.eql(\r\n        \"Проверка названия из одного символа\"\r\n    );\r\n\r\n    pm.expect(event.durationSeconds).to.eql(1800);\r\n});\r\n"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "15_Проверка_title_1_символ_POS",
+          "request": {
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "\r\n{\r\n  \"from\": \"2026-11-26T00:00:00+03:00\",\r\n  \"till\": \"2026-11-26T23:59:59+03:00\",\r\n  \"onlyTypes\": []\r\n}\r\n"
+            },
+            "header": [],
+            "method": "POST",
+            "url": {
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v2",
+                "schedule",
+                "events"
+              ],
+              "raw": "{{baseUrl}}/v2/schedule/events"
+            }
+          },
+          "response": []
+        }
+      ],
+      "name": "01_Позитивные тесты"
+    },
+    {
+      "item": [
+        {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r\npm.test(\"Статус ответа 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Событие не создано\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data).to.be.null;\r\n});\r\n\r\npm.test(\"Ошибка: title является числом\", function () {\r\n    const response = pm.response.json();\r\n\r\n    pm.expect(response.errors).to.be.an(\"array\");\r\n\r\n    const titleError = response.errors.find(\r\n        item => item.property === \"title\"\r\n    );\r\n\r\n    pm.expect(titleError).to.exist;\r\n    pm.expect(titleError.error.code).to.eql(\"not_valid\");\r\n    pm.expect(titleError.error.message).to.eql(\r\n        \"Invalid type: must be string, integer found\"\r\n    );\r\n});\r\n"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "06_Создание_title_number_NEG",
+          "request": {
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "\r\n{\r\n  \"backgroundColor\": \"#FFF7C7\",\r\n  \"color\": \"#FAC641\",\r\n  \"description\": \"Негативный тест: title является числом\",\r\n  \"title\": 123,\r\n  \"startAt\": \"2026-11-20T15:00:00+03:00\",\r\n  \"endAt\": \"2026-11-20T15:30:00+03:00\"\r\n}\r\n"
+            },
+            "header": [],
+            "method": "POST",
+            "url": {
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v2",
+                "schedule",
+                "createPersonal"
+              ],
+              "raw": "{{baseUrl}}/v2/schedule/createPersonal"
+            }
+          },
+          "response": []
+        },
+        {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r\npm.test(\"Ответ имеет формат JSON\", function () {\r\n    pm.response.to.be.json;\r\n});\r\n\r\npm.test(\"Данные созданного события отсутствуют\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data).to.be.null;\r\n});\r\n\r\npm.test(\"Ошибка: поле title обязательно\", function () {\r\n    const response = pm.response.json();\r\n\r\n    pm.expect(response.errors).to.be.an(\"array\");\r\n\r\n    const titleError = response.errors.find(\r\n        item => item.property === \"title\"\r\n    );\r\n\r\n    pm.expect(titleError).to.exist;\r\n    pm.expect(titleError.error.code).to.eql(\"not_valid\");\r\n    pm.expect(titleError.error.message).to.eql(\"Field is required\");\r\n});\r\n"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "03_Создание_без_названия",
+          "request": {
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "\r\n{\r\n  \"backgroundColor\": \"#FFF7C7\",\r\n  \"color\": \"#FAC641\",\r\n  \"description\": \"Негативный тест: событие без названия\",\r\n  \"startAt\": \"2026-11-19T14:00:00+03:00\",\r\n  \"endAt\": \"2026-11-19T14:30:00+03:00\"\r\n}\r\n"
+            },
+            "header": [],
+            "method": "POST",
+            "url": {
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v2",
+                "schedule",
+                "createPersonal"
+              ],
+              "raw": "{{baseUrl}}/v2/schedule/createPersonal"
+            }
+          },
+          "response": []
+        },
+        {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r\npm.test(\"Статус ответа 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Ответ содержит массив событий\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data.events).to.be.an(\"array\");\r\n});\r\n\r\npm.test(\"Ошибки API отсутствуют\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.errors).to.be.null;\r\n});\r\n"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "03_Проверка_отсутствия_события",
+          "request": {
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{\r\n  \"from\": \"2026-11-19T00:00:00+03:00\",\r\n  \"till\": \"2026-11-19T23:59:59+03:00\",\r\n  \"onlyTypes\": []\r\n}\r\n"
+            },
+            "header": [],
+            "method": "POST",
+            "url": {
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v2",
+                "schedule",
+                "events"
+              ],
+              "raw": "{{baseUrl}}/v2/schedule/events"
+            }
+          },
+          "response": []
+        },
+        {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r\npm.test(\"Ответ имеет формат JSON\", function () {\r\n    pm.response.to.be.json;\r\n});\r\n\r\npm.test(\"Событие не создано\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data).to.be.null;\r\n});\r\n\r\npm.test(\"Ошибка: пустое название title\", function () {\r\n    const response = pm.response.json();\r\n\r\n    pm.expect(response.errors).to.be.an(\"array\");\r\n\r\n    const titleError = response.errors.find(\r\n        item => item.property === \"title\"\r\n    );\r\n\r\n    pm.expect(titleError).to.exist;\r\n    pm.expect(titleError.error.code).to.eql(\"not_valid\");\r\n    pm.expect(titleError.error.message).to.eql(\r\n        \"Value must be at least 1 character(s) long\"\r\n    );\r\n});\r\n"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "04_Создание_с_пустым_названием_NEG",
+          "request": {
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "\r\n{\r\n  \"backgroundColor\": \"#FFF7C7\",\r\n  \"color\": \"#FAC641\",\r\n  \"description\": \"Негативный тест: пустое название\",\r\n  \"title\": \"\",\r\n  \"startAt\": \"2026-11-20T14:00:00+03:00\",\r\n  \"endAt\": \"2026-11-20T14:30:00+03:00\"\r\n}\r\n"
+            },
+            "header": [],
+            "method": "POST",
+            "url": {
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v2",
+                "schedule",
+                "createPersonal"
+              ],
+              "raw": "{{baseUrl}}/v2/schedule/createPersonal"
+            }
+          },
+          "response": []
+        },
+        {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r\npm.test(\"Статус ответа 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Ответ содержит массив событий\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data.events).to.be.an(\"array\");\r\n});\r\n\r\npm.test(\"Ошибки API отсутствуют\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.errors).to.be.null;\r\n});\r\n\r\npm.test(\"Событие с пустым названием не создано\", function () {\r\n    const response = pm.response.json();\r\n    const events = response.data.events;\r\n\r\n    pm.expect(events).to.be.an(\"array\");\r\n\r\n    const found = events.find(event =>\r\n        event.payload?.payload?.description ===\r\n        \"Негативный тест: пустое название\"\r\n    );\r\n\r\n    pm.expect(found).to.be.undefined;\r\n});\r\n"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "04_Проверка_отсутствия_события",
+          "request": {
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "\r\n{\r\n  \"from\": \"2026-11-20T00:00:00+03:00\",\r\n  \"till\": \"2026-11-20T23:59:59+03:00\",\r\n  \"onlyTypes\": []\r\n}\r\n"
+            },
+            "header": [],
+            "method": "POST",
+            "url": {
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v2",
+                "schedule",
+                "events"
+              ],
+              "raw": "{{baseUrl}}/v2/schedule/events"
+            }
+          },
+          "response": []
+        },
+        {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r\npm.test(\"Статус ответа 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Событие не создано\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data).to.be.null;\r\n});\r\n\r\npm.test(\"Ошибка: title имеет значение null\", function () {\r\n    const response = pm.response.json();\r\n\r\n    pm.expect(response.errors).to.be.an(\"array\");\r\n\r\n    const titleError = response.errors.find(\r\n        item => item.property === \"title\"\r\n    );\r\n\r\n    pm.expect(titleError).to.exist;\r\n    pm.expect(titleError.error.code).to.eql(\"not_valid\");\r\n    pm.expect(titleError.error.message).to.eql(\r\n        \"Invalid type: must be string, null found\"\r\n    );\r\n});\r\n"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "05_Создание_title_null_NEG",
+          "request": {
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "\r\n{\r\n  \"backgroundColor\": \"#FFF7C7\",\r\n  \"color\": \"#FAC641\",\r\n  \"description\": \"Негативный тест: title равен null\",\r\n  \"title\": null,\r\n  \"startAt\": \"2026-11-20T14:00:00+03:00\",\r\n  \"endAt\": \"2026-11-20T14:30:00+03:00\"\r\n}\r\n"
+            },
+            "header": [],
+            "method": "POST",
+            "url": {
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v2",
+                "schedule",
+                "createPersonal"
+              ],
+              "raw": "{{baseUrl}}/v2/schedule/createPersonal"
+            }
+          },
+          "response": []
+        },
+        {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r\npm.test(\"Статус ответа 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Ответ содержит массив событий\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data.events).to.be.an(\"array\");\r\n});\r\n\r\npm.test(\"Ошибки API отсутствуют\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.errors).to.be.null;\r\n});\r\n\r\npm.test(\"Событие с числовым title не создано\", function () {\r\n    const response = pm.response.json();\r\n    const events = response.data.events;\r\n\r\n    const found = events.find(event =>\r\n        event.payload?.payload?.description ===\r\n        \"Негативный тест: title является числом\"\r\n    );\r\n\r\n    pm.expect(found).to.be.undefined;\r\n});\r\n"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "06_Проверка_отсутствия_события",
+          "request": {
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "\r\n{\r\n  \"from\": \"2026-11-20T00:00:00+03:00\",\r\n  \"till\": \"2026-11-20T23:59:59+03:00\",\r\n  \"onlyTypes\": []\r\n}\r\n"
+            },
+            "header": [],
+            "method": "POST",
+            "url": {
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v2",
+                "schedule",
+                "events"
+              ],
+              "raw": "{{baseUrl}}/v2/schedule/events"
+            }
+          },
+          "response": []
+        },
+        {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r\npm.test(\"Статус ответа 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Событие не создано\", function () {\r\n    const response = pm.response.json();\r\n    pm.expect(response.data).to.be.null;\r\n});\r\n\r\npm.test(\"Ошибка: title является логическим значением\", function () {\r\n    const response = pm.response.json();\r\n\r\n    pm.expect(response.errors).to.be.an(\"array\");\r\n\r\n    const titleError = response.errors.find(\r\n        item => item.property === \"title\"\r\n    );\r\n\r\n    pm.expect(titleError).to.exist;\r\n    pm.expect(titleError.error.code).to.eql(\"not_valid\");\r\n    pm.expect(titleError.error.message).to.eql(\r\n        \"Invalid type: must be string, boolean found\"\r\n    );\r\n});\r\n"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "07_Создание_title_boolean_NEG",
+          "request": {
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "\r\n{\r\n  \"backgroundColor\": \"#FFF7C7\",\r\n  \"color\": \"#FAC641\",\r\n  \"description\": \"Негативный тест: title является числом\",\r\n  \"title\": true,\r\n  \"startAt\": \"2026-11-20T16:00:00+03:00\",\r\n  \"endAt\": \"2026-11-20T16:30:00+03:00\"\r\n}\r\n"
+            },
+            "header": [],
+            "method": "POST",
+            "url": {
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v2",
+                "schedule",
+                "createPersonal"
+              ],
+              "raw": "{{baseUrl}}/v2/schedule/createPersonal"
+            }
+          },
+          "response": []
+        }
+      ],
+      "name": "02_Негативные тесты"
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api-teachers.skyeng.ru",
+      "type": "string"
+    },
+    {
+      "key": "eventId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string",
+      "description": "Заполнить ЛОКАЛЬНО через Postman Vault; не публиковать"
+    }
+  ]
+}
