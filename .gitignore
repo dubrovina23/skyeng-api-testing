@@ -1,0 +1,31 @@
+
+# Secrets and credentials
+.env
+.env.*
+!.env.example
+*credentials.json
+*secrets.json
+*token.json
+
+# Postman local data
+*.postman_environment.json
+*.postman_globals.json
+skyeng_delete_*.json
+
+# Python temporary files
+__pycache__/
+*.pyc
+.venv/
+
+# IDE settings
+.idea/
+.vscode/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.log
+*.tmp
+*.bak
